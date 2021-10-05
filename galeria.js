@@ -1,5 +1,12 @@
 "use strict"
 
+const limpar = (elemento) => {
+    while (elemento.firstChild) {
+        elemento.removeChild(elemento.lastChild)
+    }
+}
+
+
 const pegarImagens = (raca) => fetch(`https://dog.ceo/api/breed/${raca}/images`)
 
 const procurarImagens = async(evento) => {
@@ -8,6 +15,8 @@ const procurarImagens = async(evento) => {
         const raca = evento.target.value
         const imagensResponse = await pegarImagens(raca)
         const imagens = await imagensResponse.json()
+        limpar(document.querySelector(".galeria-container"))
+        limpar(document.querySelector(".slide-container"))
         carregarImagens(imagens.message)
         carregarSlides(imagens.message)
     }
