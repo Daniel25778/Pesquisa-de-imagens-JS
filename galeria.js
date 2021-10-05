@@ -1,20 +1,19 @@
 "use strict"
 
-const imagens = {
-    url: [
-        "./img/arvorePorDoSol.jpg",
-        "./img/arvoreVerao.jpg",
-        "./img/coruja.jpg",
-        "./img/lagoInverno.jpg",
-        "./img/montanhaInverno.jpg",
-        "./img/porDoSolFlores.jpg",
-        "./img/raposaInverno.jpg",
-        "./img/tigreInverno.jpg"
-    ]
+const pegarImagens = () => fetch('https://dog.ceo/api/breed/boxer/images')
+
+const procurarImagens = async() => {
+    const imagensResponse = await pegarImagens()
+    const imagens = await imagensResponse.json()
+    carregarImagens(imagens.message)
+    carregarSlides(imagens.message)
 }
 
-const limparId = (urlImagem) => urlImagem.split("/")[2]
-    .split(".")[0].replace(" ", "-").toLowerCase()
+const limparId = (urlImagem) => {
+    const posBarra = urlImagem.lastIndexOf('/') + 1
+    const posPonto = urlImagem.lastIndexOf('.')
+    return urlImagem.substring(posBarra, posPonto)
+}
 
 const criarItem = (urlImagem) => {
     const container = document.querySelector(".galeria-container")
@@ -41,7 +40,7 @@ const criarSlide = (urlImagem, indice, arr) => {
 
     slide.innerHTML = `
             <div class="imagem-container">
-                <a href="" class="fechar">&#128473;</a>
+                <a href="#" class="fechar">&#128473;</a>
                 <a href="#${idAnterior}" class="navegacao anterior">&#171;</a>
                 <img src="${urlImagem}" alt="">
                 <a href="#${idProximo}" class="navegacao proximo">&#187;</a>
@@ -52,6 +51,4 @@ const criarSlide = (urlImagem, indice, arr) => {
 
 
 const carregarSlides = (imagens) => imagens.forEach(criarSlide)
-
-carregarImagens(imagens.url)
-carregarSlides(imagens.url)
+procurarImagens()
