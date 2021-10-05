@@ -1,12 +1,17 @@
 "use strict"
 
-const pegarImagens = () => fetch('https://dog.ceo/api/breed/boxer/images')
+const pegarImagens = (raca) => fetch(`https://dog.ceo/api/breed/${raca}/images`)
 
-const procurarImagens = async() => {
-    const imagensResponse = await pegarImagens()
-    const imagens = await imagensResponse.json()
-    carregarImagens(imagens.message)
-    carregarSlides(imagens.message)
+const procurarImagens = async(evento) => {
+
+    if (evento.key === 'Enter') {
+        const raca = evento.target.value
+        const imagensResponse = await pegarImagens(raca)
+        const imagens = await imagensResponse.json()
+        carregarImagens(imagens.message)
+        carregarSlides(imagens.message)
+    }
+
 }
 
 const limparId = (urlImagem) => {
@@ -51,4 +56,6 @@ const criarSlide = (urlImagem, indice, arr) => {
 
 
 const carregarSlides = (imagens) => imagens.forEach(criarSlide)
-procurarImagens()
+
+
+document.querySelector(".pesquisa-container input").addEventListener("keypress", procurarImagens)
